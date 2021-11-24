@@ -28,6 +28,7 @@ class Login extends React.Component {
     playerInfo(state);
   }
 
+
   linkToConfig(event) {
     event.preventDefault();
     const { history } = this.props;
@@ -50,7 +51,7 @@ class Login extends React.Component {
     const { name, gravatarEmail } = this.state;
     return (
       <div>
-        <form>
+        <form onSubmit={ this.handleSubmit }>
           <label htmlFor="player-input">
             <input
               type="player"
@@ -98,6 +99,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 Login.propTypes = {
   playerInfo: PropTypes.func.isRequired,
+
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
