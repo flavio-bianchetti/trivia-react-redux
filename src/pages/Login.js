@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import setPlayerInfo from '../actions';
 
 class Login extends React.Component {
   constructor() {
@@ -8,6 +11,7 @@ class Login extends React.Component {
       gravatarEmail: '',
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange({ target }) {
@@ -15,11 +19,18 @@ class Login extends React.Component {
     this.setState({ [name]: value });
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    const { playerInfo } = this.props;
+    const { state } = this;
+    playerInfo(state);
+  }
+
   render() {
     const { name, gravatarEmail } = this.state;
     return (
       <div>
-        <form>
+        <form onSubmit={ this.handleSubmit }>
           <label htmlFor="player-input">
             <input
               type="player"
@@ -59,4 +70,12 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  playerInfo: (payload) => dispatch(setPlayerInfo(payload)),
+});
+
+Login.propTypes = {
+  playerInfo: PropTypes.func.isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
