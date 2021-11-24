@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import setPlayerInfo from '../actions';
+import fetchToken from '../services/fetchToken';
 
 class Login extends React.Component {
   constructor() {
@@ -14,6 +16,26 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.linkToConfig = this.linkToConfig.bind(this);
     this.renderConfigButton = this.renderConfigButton.bind(this);
+    // this.getToken = this.getToken.bind(this);
+    this.handleTokenSave = this.handleTokenSave.bind(this);
+  }
+
+  // async getToken() {
+  //   const token = await fetchToken();
+  //   console.log(token);
+  // }
+
+  async handleTokenSave() {
+    const tokenReceived = await fetchToken();
+    console.log(tokenReceived);
+    let token = JSON.parse(localStorage.getItem('token') || '[]');
+    if (token.length === 0 || token.length === 1) {
+      token = [];
+      token = [
+        tokenReceived,
+      ];
+    }
+    localStorage.setItem('token', JSON.stringify(token));
   }
 
   handleChange({ target }) {
@@ -23,11 +45,11 @@ class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.handleTokenSave();
     const { playerInfo } = this.props;
     const { state } = this;
     playerInfo(state);
   }
-
 
   linkToConfig(event) {
     event.preventDefault();
@@ -76,19 +98,23 @@ class Login extends React.Component {
             />
           </label>
 
-          <button
-            type="submit"
-            data-testid="btn-play"
-            onClick={ this.handleSubmit }
-            disabled={
-              !(name.length > 0 && gravatarEmail.length > 0)
-            }
-          >
-            Jogar
-          </button>
+          <Link to="/gamescreen">
+            <button
+              type="submit"
+              data-testid="btn-play"
+              onClick={ this.handleSubmit }
+              disabled={
+                !(name.length > 0 && gravatarEmail.length > 0)
+              }
+            >
+              Jogar
+            </button>
+          </Link>
 
         </form>
+
         { this.renderConfigButton() }
+
       </div>);
   }
 }
