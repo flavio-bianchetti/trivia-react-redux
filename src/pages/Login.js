@@ -12,6 +12,8 @@ class Login extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.linkToConfig = this.linkToConfig.bind(this);
+    this.renderConfigButton = this.renderConfigButton.bind(this);
   }
 
   handleChange({ target }) {
@@ -24,6 +26,25 @@ class Login extends React.Component {
     const { playerInfo } = this.props;
     const { state } = this;
     playerInfo(state);
+  }
+
+
+  linkToConfig(event) {
+    event.preventDefault();
+    const { history } = this.props;
+    history.push('./configurations');
+  }
+
+  renderConfigButton() {
+    return (
+      <button
+        type="submit"
+        data-testid="btn-settings"
+        onClick={ this.linkToConfig }
+      >
+        Configurações
+      </button>
+    );
   }
 
   render() {
@@ -58,14 +79,16 @@ class Login extends React.Component {
           <button
             type="submit"
             data-testid="btn-play"
+            onClick={ this.handleSubmit }
             disabled={
               !(name.length > 0 && gravatarEmail.length > 0)
             }
           >
-            Entrar
+            Jogar
           </button>
 
         </form>
+        { this.renderConfigButton() }
       </div>);
   }
 }
@@ -76,6 +99,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 Login.propTypes = {
   playerInfo: PropTypes.func.isRequired,
+
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
