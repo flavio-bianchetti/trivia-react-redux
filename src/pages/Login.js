@@ -28,7 +28,6 @@ class Login extends React.Component {
     playerInfo(state);
   }
 
-
   linkToConfig(event) {
     event.preventDefault();
     const { history } = this.props;
