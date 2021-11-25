@@ -4,6 +4,7 @@ import html from 'react-inner-html';
 import fetchTrivia from '../services/fetchTrivia';
 import randomAnswers from '../helpers/randomAnswers';
 import Header from '../components/Header';
+import '../styles/gameScreen.css';
 
 const QUESTIONS_LENGTH = 4;
 
@@ -15,6 +16,7 @@ class GameScreen extends React.Component {
       index: 0,
     };
     this.renderQuestions = this.renderQuestions.bind(this);
+    this.addAnswersClass = this.addAnswersClass.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +29,18 @@ class GameScreen extends React.Component {
     this.setState({ questions: questions.results });
   }
 
+  addAnswersClass() {
+    const answers = document.querySelectorAll('.answer');
+
+    answers.forEach((answer) => {
+      if (answer.name === 'correct-answer') {
+        answer.classList.add('correct-answer');
+      } else {
+        answer.classList.add('incorrect-answer');
+      }
+    });
+  }
+
   renderQuestions(question) {
     const answers = randomAnswers(question);
 
@@ -37,8 +51,11 @@ class GameScreen extends React.Component {
         { answers.map((answer) => (
           <button
             data-testid={ answer.tesiId }
+            name={ answer.tesiId }
+            className="answer"
             type="button"
             key={ answer.text }
+            onClick={ () => this.addAnswersClass() }
             { ...html(answer.text) }
           />
         ))}
