@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import HomeButton from '../components/HomeButton';
 
 class Ranking extends React.Component {
   constructor() {
@@ -58,6 +59,7 @@ class Ranking extends React.Component {
         <ul>
           { this.renderRanking(this.getRanking()) }
         </ul>
+        <HomeButton />
 
       </>
     );
