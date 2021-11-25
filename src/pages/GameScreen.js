@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import html from 'react-inner-html';
 import fetchTrivia from '../services/fetchTrivia';
 import randomAnswers from '../helpers/randomAnswers';
+import Header from '../components/Header';
 
 const QUESTIONS_LENGTH = 4;
 
@@ -58,6 +59,7 @@ class GameScreen extends React.Component {
     const { questions, index } = this.state;
     return (
       <div>
+        <Header />
         {index > QUESTIONS_LENGTH ? 'gameOver'
           : questions.length > 0 && this.renderQuestions(questions[index])}
       </div>
