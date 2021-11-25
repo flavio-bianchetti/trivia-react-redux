@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import setPlayerInfo from '../actions';
 import fetchToken from '../services/fetchToken';
 
@@ -29,7 +28,7 @@ class Login extends React.Component {
     const tokenReceived = await fetchToken();
     console.log(tokenReceived);
     let token = JSON.parse(localStorage.getItem('token') || '[]');
-    if (token.length === 0 || token.length === 1) {
+    if (token.length < 2) {
       token = [];
       token = [
         tokenReceived,
@@ -43,9 +42,9 @@ class Login extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
-    this.handleTokenSave();
+    await this.handleTokenSave();
     const { playerInfo, history } = this.props;
     const { state } = this;
     playerInfo(state);
@@ -99,18 +98,16 @@ class Login extends React.Component {
             />
           </label>
 
-          <Link to="/gamescreen">
-            <button
-              type="submit"
-              data-testid="btn-play"
-              onClick={ this.handleSubmit }
-              disabled={
-                !(name.length > 0 && gravatarEmail.length > 0)
-              }
-            >
-              Jogar
-            </button>
-          </Link>
+          <button
+            type="submit"
+            data-testid="btn-play"
+            onClick={ this.handleSubmit }
+            disabled={
+              !(name.length > 0 && gravatarEmail.length > 0)
+            }
+          >
+            Jogar
+          </button>
 
         </form>
 
