@@ -46,9 +46,10 @@ class Login extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.handleTokenSave();
-    const { playerInfo } = this.props;
+    const { playerInfo, history } = this.props;
     const { state } = this;
     playerInfo(state);
+    history.push('./gamescreen');
   }
 
   linkToConfig(event) {
