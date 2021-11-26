@@ -15,6 +15,7 @@ class GameScreen extends React.Component {
       index: 0,
     };
     this.renderQuestions = this.renderQuestions.bind(this);
+    this.goToFeedback = this.goToFeedback.bind(this);
   }
 
   componentDidMount() {
@@ -55,12 +56,17 @@ class GameScreen extends React.Component {
     );
   }
 
+  goToFeedback() {
+    const { history } = this.props;
+    history.push('./feedback');
+  }
+
   render() {
     const { questions, index } = this.state;
     return (
       <div>
         <Header />
-        {index > QUESTIONS_LENGTH ? 'gameOver'
+        {index > QUESTIONS_LENGTH ? this.goToFeedback()
           : questions.length > 0 && this.renderQuestions(questions[index])}
       </div>
     );
