@@ -10,10 +10,7 @@ class Feedback extends React.Component {
     return (
       <section>
         <Header />
-        <h1>
-          { `Sua pontuação: ${playerInfo.score}` }
-        </h1>
-        <p
+        <h2
           data-testid="feedback-text"
         >
           {
@@ -21,6 +18,16 @@ class Feedback extends React.Component {
               ? 'Poderia ser melhor...'
               : 'Mandou bem!'
           }
+        </h2>
+        <p
+          data-testid="feedback-total-score"
+        >
+          { `Você acertou ${playerInfo.assertions} questões!`}
+        </p>
+        <p
+          data-testid="feedback-total-question"
+        >
+          { `Um total de ${playerInfo.score} pontos` }
         </p>
       </section>
     );
