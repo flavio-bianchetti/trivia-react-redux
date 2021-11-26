@@ -4,6 +4,7 @@ import html from 'react-inner-html';
 import fetchTrivia from '../services/fetchTrivia';
 import randomAnswers from '../helpers/randomAnswers';
 import Header from '../components/Header';
+import Timer from '../components/Timer';
 
 const QUESTIONS_LENGTH = 4;
 
@@ -15,6 +16,7 @@ class GameScreen extends React.Component {
       index: 0,
     };
     this.renderQuestions = this.renderQuestions.bind(this);
+    this.incremetIndex = this.incremetIndex.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +27,13 @@ class GameScreen extends React.Component {
     const token = JSON.parse(localStorage.getItem('token'))[0];
     const questions = await fetchTrivia(token);
     this.setState({ questions: questions.results });
+  }
+
+  incremetIndex() {
+    const { index } = this.state;
+    this.setState({
+      index: index + 1,
+    });
   }
 
   renderQuestions(question) {
@@ -62,6 +71,7 @@ class GameScreen extends React.Component {
         <Header />
         {index > QUESTIONS_LENGTH ? 'gameOver'
           : questions.length > 0 && this.renderQuestions(questions[index])}
+        <Timer incremetIndex={ this.incremetIndex } index={ index } />
       </div>
     );
   }
