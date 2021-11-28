@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import setPlayerInfo from '../actions';
+import { setPlayerInfo } from '../actions';
 import fetchToken from '../services/fetchToken';
 
 class Login extends React.Component {
@@ -10,6 +10,8 @@ class Login extends React.Component {
     this.state = {
       name: '',
       gravatarEmail: '',
+      assertions: 0,
+      score: 0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
