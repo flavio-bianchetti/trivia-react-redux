@@ -10,8 +10,8 @@ class Login extends React.Component {
     this.state = {
       name: '',
       gravatarEmail: '',
-      assertions: 0,
-      score: 0,
+      // assertions: 0,
+      // score: 0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

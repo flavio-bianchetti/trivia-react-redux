@@ -2,17 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import html from 'react-inner-html';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import fetchTrivia from '../services/fetchTrivia';
 import randomAnswers from '../helpers/randomAnswers';
 import Header from '../components/Header';
 import '../styles/gameScreen.css';
 import getGravatarImage from '../features/getGravatarImage';
 import { setPlayerScore } from '../actions/index';
-import PropTypes from 'prop-types';
 
 const QUESTIONS_LENGTH = 4;
 const ONE_SECOND = 1000;
 const TIME_LIMIT = 0;
+const TEN_NUMBER = 10;
 
 class GameScreen extends React.Component {
   constructor() {
@@ -28,7 +29,7 @@ class GameScreen extends React.Component {
         assertions: 0,
         score: 0,
       },
-      difficulty:[]
+      // difficulty:[]
     };
     this.renderQuestions = this.renderQuestions.bind(this);
     this.incremetIndex = this.incremetIndex.bind(this);
@@ -38,6 +39,7 @@ class GameScreen extends React.Component {
     this.setPlayerInfo = this.setPlayerInfo.bind(this);
     this.setStatePlayerInfo = this.setStatePlayerInfo.bind(this);
     this.createStatePlayerInfo = this.createStatePlayerInfo.bind(this);
+    this.decrementCountdown = this.decrementCountdown.bind(this);
   }
 
   componentDidMount() {
@@ -52,13 +54,51 @@ class GameScreen extends React.Component {
     this.setState({ questions: questions.results });
   }
 
+  getDifficulty(difficulty) {
+    switch (difficulty) {
+    case 'hard':
+      return 2 + 1;
+    case 'medium':
+      return 2;
+    default:
+      return 1;
+    }
+  }
+
+  setPlayerInfo() {
+    const { playerInfo } = this.props;
+    const setPlayerInfo = [{
+      name: playerInfo.name,
+      score: playerInfo.score,
+      picture: getGravatarImage(playerInfo.email)
+      || 'https://www.gravatar.com/avatar/00000000000000000000000000000000',
+    }];
+    let ranking = JSON.parse(localStorage.getItem('ranking') || '[]');
+    if (ranking.length === 0) {
+      ranking = setPlayerInfo;
+    } else {
+      const oldRanking = ranking;
+      ranking = [...oldRanking, ...setPlayerInfo];
+    }
+    localStorage.setItem('ranking', JSON.stringify(ranking));
+    return <Redirect to="/feedback" />;
+  }
+
+  setStatePlayerInfo({ name, assertions, score, gravatarEmail }) {
+    const player = {
+      name,
+      assertions,
+      score,
+      gravatarEmail,
+    };
+    const state = { player };
+    localStorage.setItem('state', JSON.stringify(state));
+  }
+
   decrementCountdown() {
-    // console.log(seconds);
     this.timer = setInterval(() => {
       const { seconds } = this.state;
-      this.setState({
-        seconds: seconds - 1,
-      });
+      this.setState({ seconds: seconds - 1 });
       if (seconds === TIME_LIMIT) {
         clearInterval(this.timer);
         this.disableButtons();
@@ -66,16 +106,15 @@ class GameScreen extends React.Component {
     }, ONE_SECOND);
   }
 
-  incremetIndex() {
-    const { index } = this.state;
-    this.setState({
-      index: index + 1,
-      isDisabled: false,
-    });
-  }
-
-  disableButtons() {
-    this.setState({ isDisabled: true });
+  createStatePlayerInfo() {
+    const player = {
+      name: '',
+      assertions: 0,
+      score: 0,
+      gravatarEmail: '',
+    };
+    const state = { player };
+    localStorage.setItem('state', JSON.stringify(state));
   }
 
   addAnswersClass(event) {
@@ -91,17 +130,16 @@ class GameScreen extends React.Component {
         answer.classList.add('incorrect-answer');
       }
     });
-
     const hasDifficulty = event.target.className.split(' ')[1];
     const newPlayer = {
       assertions: player.assertions,
       score: player.score,
-    }
+    };
     if (hasDifficulty !== '-') {
       newPlayer.assertions = player.assertions + 1;
-      newPlayer.score = player.score + (10 + (seconds * this.getDifficulty(hasDifficulty)));
+      newPlayer.score = player.score
+        + (TEN_NUMBER + (seconds * this.getDifficulty(hasDifficulty)));
     }
-
     clearInterval(this.timer);
     this.setState({
       isDisabled: true,
@@ -120,24 +158,23 @@ class GameScreen extends React.Component {
     });
   }
 
-  getDifficulty(difficulty) {
-    switch(difficulty) {
-      case 'hard':
-        return 3;
-      case 'medium':
-        return 2;
-      default:
-        return 1;
-    }
+  disableButtons() {
+    this.setState({ isDisabled: true });
+  }
+
+  incremetIndex() {
+    const { index } = this.state;
+    this.setState({
+      index: index + 1,
+      isDisabled: false,
+    });
   }
 
   renderQuestions(question) {
     const { isDisabled, wasRenderized, answers } = this.state;
-
     if (!wasRenderized) {
       this.setState({ answers: randomAnswers(question), wasRenderized: true });
     }
-
     return (
       <div>
         <h2 data-testid="question-category">{ question.category }</h2>
@@ -174,58 +211,6 @@ class GameScreen extends React.Component {
     );
   }
 
-  createStatePlayerInfo() {
-    const player = {
-      name: '',
-      assertions: 0,
-      score: 0,
-      gravatarEmail: '',
-    };
-    const state = {
-      player,
-    }
-    localStorage.setItem('state', JSON.stringify(state));
-  }
-
-  setStatePlayerInfo({name, assertions, score, gravatarEmail}) {
-    const player = {
-      name,
-      assertions,
-      score,
-      gravatarEmail,
-    };
-    const state = {
-      player,
-    }
-
-    localStorage.setItem('state', JSON.stringify(state));
-  }
-
-  setPlayerInfo() {
-    const { playerInfo } = this.props;
-    const setPlayerInfo = [
-      {
-        name: playerInfo.name,
-        score: playerInfo.score,
-        picture: getGravatarImage(playerInfo.email) 
-        || 'https://www.gravatar.com/avatar/00000000000000000000000000000000',
-      }
-    ];
-    let ranking = JSON.parse(localStorage.getItem('ranking') || '[]');
-    if (ranking.length === 0) {
-      ranking = setPlayerInfo;
-    } else {
-      // verificar se já existe e atualiza a pontuação.
-      const oldRanking = ranking;
-      ranking = [
-        ...oldRanking,
-        ...setPlayerInfo,
-      ];
-    }
-    localStorage.setItem('ranking', JSON.stringify(ranking));
-    return <Redirect to="/feedback" />
-  }
-
   render() {
     const { questions, index, seconds, player } = this.state;
     console.log(player.assertions, player.score);
@@ -252,8 +237,8 @@ GameScreen.propTypes = ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  playerScore: (payload) => dispatch(setPlayerScore(payload)), 
-})
+  playerScore: (payload) => dispatch(setPlayerScore(payload)),
+});
 
 const mapStateToProps = (state) => ({
   playerInfo: state.player,
