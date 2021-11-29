@@ -16,19 +16,19 @@ class Feedback extends React.Component {
         >
           {
             playerInfo.assertions < average
-              ? 'Poderia ser melhor...'
+              ? 'Podia ser melhor...'
               : 'Mandou bem!'
           }
         </h2>
         <p
-          data-testid="feedback-total-score"
-        >
-          { `Você acertou ${playerInfo.assertions} questões!`}
-        </p>
-        <p
           data-testid="feedback-total-question"
         >
-          { `Um total de ${playerInfo.score} pontos` }
+          { playerInfo.assertions || 0 }
+        </p>
+        <p
+          data-testid="feedback-total-score"
+        >
+          { playerInfo.score || 0 }
         </p>
         <RedirectButton
           path="/"
