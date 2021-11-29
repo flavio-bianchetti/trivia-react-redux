@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import HomeButton from '../components/HomeButton';
+import RedirectButton from '../components/RedirectButton';
 
 class Ranking extends React.Component {
   constructor() {
@@ -8,18 +8,6 @@ class Ranking extends React.Component {
 
     this.randerRanking = this.renderRanking.bind(this);
     this.getRanking = this.getRanking.bind(this);
-    this.setRankingToLocalStorage = this.setRankingToLocalStorage.bind(this);
-  }
-
-  setRankingToLocalStorage() {
-    const imageURL = 'https://www.gravatar.com/avatar/00000000000000000000000000000000';
-    const ranking = [
-      { name: 'Lucas', score: 7, picture: imageURL },
-      { name: 'Flavio', score: 9, picture: imageURL },
-      { name: 'Sairo', score: 8, picture: imageURL },
-      { name: 'Arthur', score: 10, picture: imageURL },
-    ];
-    localStorage.setItem('ranking', JSON.stringify(ranking));
   }
 
   getRanking() {
@@ -31,7 +19,6 @@ class Ranking extends React.Component {
   }
 
   renderRanking(ranking) {
-    this.setRankingToLocalStorage();
     return ranking.map((player, index) => (
       <li key={ index }>
         <span>
@@ -60,7 +47,11 @@ class Ranking extends React.Component {
         <ul>
           { this.renderRanking(this.getRanking()) }
         </ul>
-        <HomeButton />
+        <RedirectButton
+          path="/"
+          testid="btn-go-home"
+          textContent="Voltar ao Início"
+        />
 
       </>
     );
