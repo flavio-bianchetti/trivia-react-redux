@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 class RedirectButton extends React.Component {
   render() {
-    const { path, testid, textContent, history } = this.props;
+    const { path, testid, textContent } = this.props;
     return (
       <Link to={ path }>
         <button
