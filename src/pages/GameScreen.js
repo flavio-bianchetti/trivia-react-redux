@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import '../styles/gameScreen.css';
 import getGravatarImage from '../features/getGravatarImage';
 import { setPlayerScore } from '../actions/index';
+import { createStatePlayerInfo } from '../helpers/setLocalStorage';
 
 const QUESTIONS_LENGTH = 4;
 const ONE_SECOND = 1000;
@@ -29,6 +30,7 @@ class GameScreen extends React.Component {
         assertions: 0,
         score: 0,
       },
+      btnNextIsVisible: false,
       // difficulty:[]
     };
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -38,14 +40,13 @@ class GameScreen extends React.Component {
     this.getDifficulty = this.getDifficulty.bind(this);
     this.setPlayerInfo = this.setPlayerInfo.bind(this);
     this.setStatePlayerInfo = this.setStatePlayerInfo.bind(this);
-    this.createStatePlayerInfo = this.createStatePlayerInfo.bind(this);
     this.decrementCountdown = this.decrementCountdown.bind(this);
   }
 
   componentDidMount() {
     this.decrementCountdown();
     this.getQuestions();
-    this.createStatePlayerInfo();
+    createStatePlayerInfo();
   }
 
   async getQuestions() {
@@ -106,17 +107,6 @@ class GameScreen extends React.Component {
     }, ONE_SECOND);
   }
 
-  createStatePlayerInfo() {
-    const player = {
-      name: '',
-      assertions: 0,
-      score: 0,
-      gravatarEmail: '',
-    };
-    const state = { player };
-    localStorage.setItem('state', JSON.stringify(state));
-  }
-
   addAnswersClass(event) {
     event.preventDefault();
     const answers = document.querySelectorAll('.answer');
@@ -145,6 +135,7 @@ class GameScreen extends React.Component {
       isDisabled: true,
       seconds: secondOfTheClick,
       player: newPlayer,
+      btnNextIsVisible: true,
     });
     playerScore({
       assertions: newPlayer.assertions,
@@ -159,7 +150,10 @@ class GameScreen extends React.Component {
   }
 
   disableButtons() {
-    this.setState({ isDisabled: true });
+    this.setState({
+      isDisabled: true,
+      btnNextIsVisible: true,
+    });
   }
 
   incremetIndex() {
@@ -171,7 +165,7 @@ class GameScreen extends React.Component {
   }
 
   renderQuestions(question) {
-    const { isDisabled, wasRenderized, answers } = this.state;
+    const { isDisabled, wasRenderized, answers, btnNextIsVisible } = this.state;
     if (!wasRenderized) {
       this.setState({ answers: randomAnswers(question), wasRenderized: true });
     }
@@ -191,22 +185,28 @@ class GameScreen extends React.Component {
             { ...html(answer.text) }
           />
         ))}
-        <button
-          type="button"
-          onClick={ () => {
-            const { index } = this.state;
-            clearInterval(this.timer);
-            this.decrementCountdown();
-            this.setState({
-              index: index + 1,
-              isDisabled: false,
-              wasRenderized: false,
-              seconds: 30,
-            });
-          } }
-        >
-          Próxima
-        </button>
+        {
+          btnNextIsVisible && (
+            <button
+            data-testid="btn-next"
+              type="button"
+              onClick={ () => {
+                const { index } = this.state;
+                clearInterval(this.timer);
+                this.decrementCountdown();
+                this.setState({
+                  index: index + 1,
+                  isDisabled: false,
+                  wasRenderized: false,
+                  seconds: 30,
+                  btnNextIsVisible: false,
+                });
+              } }
+            >
+              Próxima
+            </button>
+          )
+        }
       </div>
     );
   }
