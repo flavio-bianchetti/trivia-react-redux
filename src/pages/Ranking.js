@@ -39,8 +39,6 @@ class Ranking extends React.Component {
   }
 
   render() {
-    // const { playerInfo } = this.props;
-    this.setRankingToLocalStorage();
     return (
       <>
         <h1 data-testid="ranking-title">Ranking</h1>
@@ -57,13 +55,5 @@ class Ranking extends React.Component {
     );
   }
 }
-
-// const mapStateToProps = (state) => ({
-//   playerInfo: state.player,
-// });
-
-// Ranking.propTypes = ({
-//   playerInfo: PropTypes.objectOf(PropTypes.any).isRequired,
-// });
 
 export default connect()(Ranking);
