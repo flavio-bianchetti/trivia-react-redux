@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import '../styles/gameScreen.css';
 import getGravatarImage from '../features/getGravatarImage';
 import { setPlayerScore } from '../actions/index';
-import { createStatePlayerInfo } from '../helpers/setLocalStorage';
+import createStatePlayerInfo from '../helpers/setLocalStorage';
 
 const QUESTIONS_LENGTH = 4;
 const ONE_SECOND = 1000;
@@ -188,7 +188,7 @@ class GameScreen extends React.Component {
         {
           btnNextIsVisible && (
             <button
-            data-testid="btn-next"
+              data-testid="btn-next"
               type="button"
               onClick={ () => {
                 const { index } = this.state;

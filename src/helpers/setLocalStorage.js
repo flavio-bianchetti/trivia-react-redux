@@ -1,4 +1,4 @@
-export function createStatePlayerInfo() {
+export default function createStatePlayerInfo() {
   const player = {
     name: '',
     assertions: 0,
