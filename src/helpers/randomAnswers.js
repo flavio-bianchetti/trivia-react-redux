@@ -5,10 +5,12 @@ function createAnswerObject(question) {
     {
       text: question.correct_answer,
       tesiId: 'correct-answer',
+      difficulty: question.difficulty,
     },
     {
       text: question.incorrect_answers[0],
       tesiId: 'wrong-answer-1',
+      difficulty: '-',
     },
   ];
 
@@ -18,10 +20,12 @@ function createAnswerObject(question) {
       {
         text: question.incorrect_answers[1],
         tesiId: 'wrong-answer-2',
+        difficulty: '-',
       },
       {
         text: question.incorrect_answers[2],
         tesiId: 'wrong-answer-3',
+        difficulty: '-',
       },
     ];
   }
