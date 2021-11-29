@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import RedirectButton from '../components/RedirectButton';
 
 class Feedback extends React.Component {
   render() {
@@ -29,6 +30,11 @@ class Feedback extends React.Component {
         >
           { `Um total de ${playerInfo.score} pontos` }
         </p>
+        <RedirectButton
+          path="/"
+          testid="btn-play-again"
+          textContent="Jogar novamente"
+        />
       </section>
     );
   }
