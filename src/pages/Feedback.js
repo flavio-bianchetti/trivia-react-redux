@@ -35,6 +35,11 @@ class Feedback extends React.Component {
           testid="btn-play-again"
           textContent="Jogar novamente"
         />
+        <RedirectButton
+          path="/ranking"
+          testid="btn-ranking"
+          textContent="Ver Ranking"
+        />
       </section>
     );
   }
