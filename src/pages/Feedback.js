@@ -15,7 +15,7 @@ class Feedback extends React.Component {
         >
           {
             playerInfo.assertions < average
-              ? 'Poderia ser melhor...'
+              ? 'Podia ser melhor...'
               : 'Mandou bem!'
           }
         </h2>
